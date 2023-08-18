@@ -1,3 +1,3 @@
 def test_import():
-    import symfem
-    import dof_transformations
+    import symfem  # noqa: F401
+    import dof_transformations  # noqa: F401
