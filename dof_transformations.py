@@ -1,8 +1,9 @@
 """DOF transformations."""
 
 import typing
-import sympy
+
 import symfem
+import sympy
 
 
 def compute_base_transformations(
