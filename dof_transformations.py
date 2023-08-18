@@ -78,7 +78,7 @@ def get_maps(
     tdim = len(fwd_map)
 
     j_inv = sympy.Matrix([[r.diff(v) for v in x[:tdim]] for r in fwd_map]).inv()
-    constant = tuple(m.subs(x[0], 0).subs(x[1], 0).subs(x[2], 0) for v, m in zip(x, fwd_map))
+    constant = tuple(m.subs(x[0], 0).subs(x[1], 0).subs(x[2], 0) for m in fwd_map)
     bwd_map = tuple(j_inv @ sympy.Matrix([v - c for v, c in zip(x, constant)])[:, 0])
 
     return fwd_map, bwd_map
@@ -105,18 +105,19 @@ def compute_base_transformations(
         if d.mapping != mapping:
             raise ValueError("DOF transformations not implemeneted for elements "
                              "with mixed mapping types.")
-    map_f = getattr(symfem.mappings, f"{mapping}_inverse")
+    pull_back = getattr(symfem.mappings, f"{mapping}_inverse")
 
     basis = element.get_basis_functions()
 
-    for name, entity, function in perm:
-        fwd_map, bwd_map = get_maps(function)
+    for name, entity, perm_function in perm:
+        fwd_map, bwd_map = get_maps(perm_function)
 
         matrix = []
         dofs = element.entity_dofs(*entity)
         for d in dofs:
-            pulled_f = map_f(basis[d], fwd_map, bwd_map, reference.tdim)
-            matrix.append([element.dofs[d].eval(pulled_f) for d in dofs])
+            function = basis[d]
+            pulled_function = pull_back(function, fwd_map, bwd_map, reference.tdim)
+            matrix.append([element.dofs[d].eval(pulled_function) for d in dofs])
         transformations[name] = sympy.Matrix(matrix)
 
     return transformations
