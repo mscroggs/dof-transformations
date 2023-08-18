@@ -1,0 +1,36 @@
+name: 🧪📦 Test packages
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-tests:
+    name: Run tests with Symfem installed from pip
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/checkout@v3
+      - run: python3 -m pip install symfem pytest flake8 pydocstyle mypy isort
+        name: Install Symfem
+      - run: python3 -m flake8 .
+        name: Run flake8 checks
+      - run: python3 -m pydocstyle .
+        name: Run pydocstyle checks
+      - run: python3 -m mypy .
+        name: Run mypy checks
+      - run: python3 -m isort --check .
+        name: Run isort checks
+
+      - run: python3 -m pytest test/
+        name: Run unit tests
