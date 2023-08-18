@@ -21,7 +21,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - uses: actions/checkout@v3
-      - run: python3 -m pip install symfem
+      - run: python3 -m pip install git+https://github.com/mscroggs/symfem@remove-tdim-mapping-input
         name: Install Symfem
       - run: python3 -m pip install pytest flake8 pydocstyle mypy isort
         name: Install test requirements
