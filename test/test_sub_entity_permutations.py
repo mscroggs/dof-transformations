@@ -13,8 +13,6 @@ def test_sub_entity_permutations(cellname):
     perms = get_sub_entity_permutations(reference)
 
     for perm in perms:
-        print(perm[0])
-
         entity_vertices = reference.sub_entity(*perm[1]).vertices
         mapped_points = [perm[2](p) for p in entity_vertices]
         for p in mapped_points:
