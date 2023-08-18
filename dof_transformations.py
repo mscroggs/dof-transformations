@@ -27,11 +27,11 @@ def get_sub_entity_permutations(
     if reference.name == "interval":
         return []
     if reference.name == "triangle":
-        return [("interval reflection", (1, 2), lambda x: (1 - x[0], x[1]))]
+        return [("interval reflection", (1, 0), lambda x: (x[1], x[0]))]
     if reference.name == "tetrahedron":
         return [
-            ("interval reflection", (1, 5), lambda x: (1 - x[0], x[1], x[2])),
-            ("triangle rotation", (2, 3), lambda x: (x[1], 1 - x[0] - x[1], x[2])),
+            ("interval reflection", (1, 0), lambda x: (x[0], x[2], x[1])),
+            ("triangle rotation", (2, 3), lambda x: (1 - x[0] - x[1], x[0], x[2])),
             ("triangle reflection", (2, 3), lambda x: (x[1], x[0], x[2])),
         ]
     if reference.name == "quadrilateral":
@@ -39,23 +39,23 @@ def get_sub_entity_permutations(
     if reference.name == "hexahedron":
         return [
             ("interval reflection", (1, 0), lambda x: (1 - x[0], x[1], x[2])),
-            ("quadrilateral rotation", (2, 0), lambda x: (x[1], 1 - x[0], x[2])),
+            ("quadrilateral rotation", (2, 0), lambda x: (1 - x[1], x[0], x[2])),
             ("quadrilateral reflection", (2, 0), lambda x: (x[1], x[0], x[2])),
         ]
     if reference.name == "prism":
         return [
             ("interval reflection", (1, 0), lambda x: (1 - x[0] - x[1], x[1], x[2])),
-            ("quadrilateral rotation", (2, 1), lambda x: (x[2], x[1], 1 - x[0])),
+            ("quadrilateral rotation", (2, 1), lambda x: (1 - x[2], x[1], x[0])),
             ("quadrilateral reflection", (2, 1), lambda x: (x[2], x[1], x[0])),
-            ("triangle rotation", (2, 0), lambda x: (x[1], 1 - x[0] - x[1], x[2])),
+            ("triangle rotation", (2, 0), lambda x: (1 - x[0] - x[1], x[0], x[2])),
             ("triangle reflection", (2, 0), lambda x: (x[1], x[0], x[2])),
         ]
     if reference.name == "pyramid":
         return [
             ("interval reflection", (1, 0), lambda x: (1 - x[0], x[1], x[2])),
-            ("quadrilateral rotation", (2, 0), lambda x: (x[1], 1 - x[0], x[2])),
+            ("quadrilateral rotation", (2, 0), lambda x: (1 - x[1], x[0], x[2])),
             ("quadrilateral reflection", (2, 0), lambda x: (x[1], x[0], x[2])),
-            ("triangle rotation", (2, 1), lambda x: (x[2], x[1], 1 - x[0] - x[2])),
+            ("triangle rotation", (2, 1), lambda x: (1 - x[0] - x[2], x[1], x[0])),
             ("triangle reflection", (2, 1), lambda x: (x[2], x[1], x[0])),
         ]
 
@@ -105,18 +105,19 @@ def compute_base_transformations(
         if d.mapping != mapping:
             raise ValueError("DOF transformations not implemeneted for elements "
                              "with mixed mapping types.")
+    map_f = getattr(symfem.mappings, f"{mapping}_inverse")
 
     basis = element.get_basis_functions()
 
     for name, entity, function in perm:
         fwd_map, bwd_map = get_maps(function)
 
+        matrix = []
         dofs = element.entity_dofs(*entity)
-        entity_basis = [basis[d] for d in dofs]
-        pulled_basis = [getattr(symfem.mappings, f"{mapping}")(f, fwd_map, bwd_map, reference.tdim)
-                        for f in entity_basis]
-
-        transformations[name] = sympy.Matrix([
-            [element.dofs[d].eval(f) for d in dofs] for f in pulled_basis])
+        for d in dofs:
+            f = basis[d]
+            pulled_f = map_f(basis[d], fwd_map, bwd_map, reference.tdim)
+            matrix.append([element.dofs[d].eval(pulled_f) for d in dofs])
+        transformations[name] = sympy.Matrix(matrix)
 
     return transformations
