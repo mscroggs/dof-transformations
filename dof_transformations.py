@@ -116,7 +116,7 @@ def compute_base_transformations(
         dofs = element.entity_dofs(*entity)
         for d in dofs:
             function = basis[d]
-            pulled_function = pull_back(function, fwd_map, bwd_map, reference.tdim)
+            pulled_function = pull_back(function, fwd_map, bwd_map)
             matrix.append([element.dofs[d].eval(pulled_function) for d in dofs])
         transformations[name] = sympy.Matrix(matrix)
 
