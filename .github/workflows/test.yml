@@ -21,7 +21,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - uses: actions/checkout@v3
-      - run: python3 -m pip install git+https://github.com/mscroggs/symfem
+      - run: python3 -m pip install symfem
         name: Install Symfem
       - run: python3 -m pip install pytest flake8 pydocstyle mypy isort
         name: Install test requirements
