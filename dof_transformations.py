@@ -105,7 +105,7 @@ def compute_base_transformations(
         if d.mapping != mapping:
             raise ValueError("DOF transformations not implemeneted for elements "
                              "with mixed mapping types.")
-    pull_back = getattr(symfem.mappings, f"{mapping}_inverse")
+    pull_back = symfem.mappings.get_mapping(mapping, inverse=True)
 
     basis = element.get_basis_functions()
 
