@@ -71,7 +71,7 @@ def apply_matrix(
     for i in range(dim):
         for j in range(i+1, dim):
             data[i] += mat[i, j] * data[j]
-    for i in range(1, dim + 1):
-        data[dim - i] *= mat[dim - i, dim - i]
-        for j in range(dim - i):
-            data[dim - i] += mat[dim - i, j] * data[j]
+    for i in range(dim - 1, -1, -1):
+        data[i] *= mat[i, i]
+        for j in range(i):
+            data[i] += mat[i, j] * data[j]
