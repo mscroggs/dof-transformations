@@ -1,3 +1,5 @@
+"""In place permutations and matrix mutiplication."""
+
 import sympy
 import typing
 
