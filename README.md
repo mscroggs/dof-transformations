@@ -7,3 +7,9 @@ You can do this by running:
 ```bash
 pip install symfem
 ```
+
+The code in this repo can be tested by running:
+
+```bash
+python -m pytest test/
+```
