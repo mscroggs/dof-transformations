@@ -1,6 +1,8 @@
-import sympy
-import pytest
 import random
+
+import pytest
+import sympy
+
 import in_place
 
 

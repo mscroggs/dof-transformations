@@ -1,7 +1,8 @@
 """In place permutations and matrix mutiplication."""
 
-import sympy
 import typing
+
+import sympy
 
 
 def prepare_permutation(perm: typing.List[int]):
