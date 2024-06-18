@@ -7,19 +7,19 @@ import sympy
 from symfem.geometry import PointType
 
 
-def get_sub_entity_permutations(
+def get_sub_entity_transformations(
     reference: symfem.references.Reference
 ) -> typing.List[typing.Tuple[
     str, typing.Tuple[int, int], typing.Callable[[PointType], PointType]
 ]]:
-    """Get maps that permute each sub-entity type.
+    """Get maps that transform each sub-entity type.
 
     Args:
         reference: The reference cell
 
     Returns:
         A list of triplets containing the transformation name, (tdim, entity number), and function
-        that permutes the entity
+        that transforms the entity
     """
     if reference != reference.default_reference():
         raise ValueError("Computing transformations is not supported for non-default references.")
@@ -96,7 +96,7 @@ def compute_base_transformations(
         A dictionary of base transformation matrices
     """
     reference = element.reference
-    perm = get_sub_entity_permutations(reference)
+    maps = get_sub_entity_transformations(reference)
 
     transformations = {}
 
@@ -109,8 +109,8 @@ def compute_base_transformations(
 
     basis = element.get_basis_functions()
 
-    for name, entity, perm_function in perm:
-        fwd_map, bwd_map = get_maps(perm_function)
+    for name, entity, function in maps:
+        fwd_map, bwd_map = get_maps(function)
 
         matrix = []
         dofs = element.entity_dofs(*entity)

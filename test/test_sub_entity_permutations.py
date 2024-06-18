@@ -1,16 +1,16 @@
 import pytest
 import symfem
 
-from dof_transformations import get_sub_entity_permutations
+from dof_transformations import get_sub_entity_transformations
 
 
 @pytest.mark.parametrize("cellname", [
     "interval", "triangle", "quadrilateral", "tetrahedron",
     "hexahedron", "prism", "pyramid",
 ])
-def test_sub_entity_permutations(cellname):
+def test_sub_entity_transformations(cellname):
     reference = symfem.create_reference(cellname)
-    perms = get_sub_entity_permutations(reference)
+    perms = get_sub_entity_transformations(reference)
 
     for perm in perms:
         entity_vertices = reference.sub_entity(*perm[1]).vertices
