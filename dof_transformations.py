@@ -115,8 +115,7 @@ def compute_base_transformations(
         matrix = []
         dofs = element.entity_dofs(*entity)
         for d in dofs:
-            function = basis[d]
-            pushed_function = push_forward(function, fwd_map, bwd_map)
+            pushed_function = push_forward(basis[d], fwd_map, bwd_map)
             matrix.append([element.dofs[i].eval(pushed_function) for i in dofs])
         transformations[name] = sympy.Matrix(matrix)
 
