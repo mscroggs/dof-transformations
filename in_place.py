@@ -1,6 +1,6 @@
 """In place permutations and matrix mutiplication."""
 
-from typing import List, Any, Tuple
+from typing import Any, List, Tuple
 
 import sympy
 

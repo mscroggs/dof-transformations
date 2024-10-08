@@ -1,6 +1,6 @@
 """DOF transformations."""
 
-from typing import List, Tuple, Callable, Dict
+from typing import Callable, Dict, List, Tuple
 
 import symfem
 import sympy
