@@ -26,15 +26,13 @@ def apply_permutation(perm: List[int], data: List[Any]):
 
     Args:
         perm: The prepared permutation
-        data: The data to apply the permutation to
+        data: The data to apply the permutation to. This input will be changed by this function
     """
     for i, j in enumerate(perm):
         data[i], data[j] = data[j], data[i]
 
 
-def prepare_matrix(
-    mat_in: sympy.matrices.dense.MutableDenseMatrix,
-) -> Tuple[sympy.matrices.dense.MutableDenseMatrix, List[int]]:
+def prepare_matrix(mat_in: sympy.Matrix) -> Tuple[sympy.Matrix, List[int]]:
     """Convert a matrix into the format used by apply_matrix.
 
     Args:
@@ -59,7 +57,7 @@ def prepare_matrix(
 
 
 def apply_matrix(
-    mat: sympy.matrices.dense.MutableDenseMatrix,
+    mat: sympy.Matrix,
     perm: List[int],
     data: List[Any],
 ):
@@ -68,7 +66,7 @@ def apply_matrix(
     Args:
         mat: The prepared matrix
         perm: The permutation returned by prepare_matrix
-        data: The data to apply the matrix to
+        data: The data to apply the matrix to. This input will be changed by this function
     """
     assert mat.shape[0] == mat.shape[1]
     dim = mat.shape[0]

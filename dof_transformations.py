@@ -1,6 +1,6 @@
 """DOF transformations."""
 
-import typing
+from typing import List, Tuple, Callable, Dict
 
 import symfem
 import sympy
@@ -9,9 +9,7 @@ from symfem.geometry import PointType
 
 def get_sub_entity_transformations(
     reference: symfem.references.Reference,
-) -> typing.List[
-    typing.Tuple[str, typing.Tuple[int, int], typing.Callable[[PointType], PointType]]
-]:
+) -> List[Tuple[str, Tuple[int, int], Callable[[PointType], PointType]]]:
     """Get maps that transform each sub-entity type.
 
     Args:
@@ -65,10 +63,8 @@ def get_sub_entity_transformations(
 
 
 def get_maps(
-    function: typing.Callable[[PointType], PointType],
-) -> typing.Tuple[
-    typing.Tuple[sympy.core.expr.Expr, ...], typing.Tuple[sympy.core.expr.Expr, ...]
-]:
+    function: Callable[[PointType], PointType],
+) -> Tuple[Tuple[sympy.Expr, ...], Tuple[sympy.Expr, ...]]:
     """Get the forward and backward maps from a function.
 
     Args:
@@ -90,7 +86,7 @@ def get_maps(
 
 def compute_base_transformations(
     element: symfem.finite_element.CiarletElement,
-) -> typing.Dict[str, sympy.matrices.dense.MutableDenseMatrix]:
+) -> Dict[str, sympy.matrices.dense.MutableDenseMatrix]:
     """Compute the base transformations for an element.
 
     Args:
