@@ -1,11 +1,11 @@
 """In place permutations and matrix mutiplication."""
 
-import typing
+from typing import List, Any, Tuple
 
 import sympy
 
 
-def prepare_permutation(perm_in: typing.List[int]) -> typing.List[int]:
+def prepare_permutation(perm_in: List[int]) -> List[int]:
     """Convert a permutation into the format used by apply_permutation.
 
     Args:
@@ -21,7 +21,7 @@ def prepare_permutation(perm_in: typing.List[int]) -> typing.List[int]:
     return perm
 
 
-def apply_permutation(perm: typing.List[int], data: typing.List[typing.Any]):
+def apply_permutation(perm: List[int], data: List[Any]):
     """Apply a permutation to some data.
 
     Args:
@@ -34,7 +34,7 @@ def apply_permutation(perm: typing.List[int], data: typing.List[typing.Any]):
 
 def prepare_matrix(
     mat_in: sympy.matrices.dense.MutableDenseMatrix,
-) -> typing.Tuple[sympy.matrices.dense.MutableDenseMatrix, typing.List[int]]:
+) -> Tuple[sympy.matrices.dense.MutableDenseMatrix, List[int]]:
     """Convert a matrix into the format used by apply_matrix.
 
     Args:
@@ -47,7 +47,10 @@ def prepare_matrix(
     dim = mat_in.shape[0]
     lower, upper, swaps = mat_in.transpose().LUdecomposition()
     mat = sympy.Matrix(
-        [[lower[j, i] if j > i else upper[j, i] for j in range(dim)] for i in range(dim)]
+        [
+            [lower[j, i] if j > i else upper[j, i] for j in range(dim)]
+            for i in range(dim)
+        ]
     )
     perm = list(range(dim))
     for i, j in swaps:
@@ -57,8 +60,8 @@ def prepare_matrix(
 
 def apply_matrix(
     mat: sympy.matrices.dense.MutableDenseMatrix,
-    perm: typing.List[int],
-    data: typing.List[typing.Any],
+    perm: List[int],
+    data: List[Any],
 ):
     """Apply a matrix to some data.
 
