@@ -4,10 +4,18 @@ import symfem
 from dof_transformations import get_sub_entity_transformations
 
 
-@pytest.mark.parametrize("cellname", [
-    "interval", "triangle", "quadrilateral", "tetrahedron",
-    "hexahedron", "prism", "pyramid",
-])
+@pytest.mark.parametrize(
+    "cellname",
+    [
+        "interval",
+        "triangle",
+        "quadrilateral",
+        "tetrahedron",
+        "hexahedron",
+        "prism",
+        "pyramid",
+    ],
+)
 def test_sub_entity_transformations(cellname):
     reference = symfem.create_reference(cellname)
     perms = get_sub_entity_transformations(reference)

@@ -5,15 +5,20 @@ import typing
 import sympy
 
 
-def prepare_permutation(perm: typing.List[int]):
+def prepare_permutation(perm_in: typing.List[int]) -> typing.List[int]:
     """Convert a permutation into the format used by apply_permutation.
 
     Args:
-        perm: The permutation. This will be changed by this function
+        perm_in: The permutation
+
+    Returns:
+        A prepared permutation
     """
+    perm = [i for i in perm_in]
     for i, _ in enumerate(perm):
         while perm[i] < i:
             perm[i] = perm[perm[i]]
+    return perm
 
 
 def apply_permutation(perm: typing.List[int], data: typing.List[typing.Any]):
@@ -27,40 +32,39 @@ def apply_permutation(perm: typing.List[int], data: typing.List[typing.Any]):
         data[i], data[j] = data[j], data[i]
 
 
-def prepare_matrix(mat: sympy.matrices.dense.MutableDenseMatrix) -> typing.List[int]:
+def prepare_matrix(
+    mat_in: sympy.matrices.dense.MutableDenseMatrix,
+) -> typing.Tuple[sympy.matrices.dense.MutableDenseMatrix, typing.List[int]]:
     """Convert a matrix into the format used by apply_matrix.
 
     Args:
-        mat: The matrix
+        mat_in: The matrix
 
     Returns:
-        The permutation to pass into apply_matrix
+        The permutation and matrix to pass into apply_matrix
     """
-    assert mat.shape[0] == mat.shape[1]
-    dim = mat.shape[0]
-    lower, upper, swaps = mat.transpose().LUdecomposition()
-    for i in range(dim):
-        for j in range(dim):
-            if j > i:
-                mat[i, j] = lower[j, i]
-            else:
-                mat[i, j] = upper[j, i]
+    assert mat_in.shape[0] == mat_in.shape[1]
+    dim = mat_in.shape[0]
+    lower, upper, swaps = mat_in.transpose().LUdecomposition()
+    mat = sympy.Matrix(
+        [[lower[j, i] if j > i else upper[j, i] for j in range(dim)] for i in range(dim)]
+    )
     perm = list(range(dim))
     for i, j in swaps:
         perm[i], perm[j] = perm[j], perm[i]
-    prepare_permutation(perm)
-    return perm
+    return mat, prepare_permutation(perm)
 
 
 def apply_matrix(
-    perm: typing.List[int], mat: sympy.matrices.dense.MutableDenseMatrix,
-    data: typing.List[typing.Any]
+    mat: sympy.matrices.dense.MutableDenseMatrix,
+    perm: typing.List[int],
+    data: typing.List[typing.Any],
 ):
     """Apply a matrix to some data.
 
     Args:
-        perm: The permutation returned by prepare_matrix
         mat: The prepared matrix
+        perm: The permutation returned by prepare_matrix
         data: The data to apply the matrix to
     """
     assert mat.shape[0] == mat.shape[1]
@@ -69,7 +73,7 @@ def apply_matrix(
     apply_permutation(perm, data)
 
     for i in range(dim):
-        for j in range(i+1, dim):
+        for j in range(i + 1, dim):
             data[i] += mat[i, j] * data[j]
     for i in range(dim - 1, -1, -1):
         data[i] *= mat[i, i]

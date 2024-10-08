@@ -11,7 +11,9 @@ def test_nedelec_2d(cell_type):
     element = symfem.create_element(cell_type, "Nedelec", 3)
     t = compute_base_transformations(element)
     assert len(t) == 1
-    assert t["interval reflection"] == sympy.Matrix([[0, -1, 0], [-1, 0, 0], [0, 0, -1]])
+    assert t["interval reflection"] == sympy.Matrix(
+        [[0, -1, 0], [-1, 0, 0], [0, 0, -1]]
+    )
 
 
 def test_nedelec_tetrahedron():
@@ -19,21 +21,29 @@ def test_nedelec_tetrahedron():
     element = symfem.create_element("tetrahedron", "Nedelec", 3)
     t = compute_base_transformations(element)
     assert len(t) == 3
-    assert t["interval reflection"] == sympy.Matrix([[0, -1, 0], [-1, 0, 0], [0, 0, -1]])
-    assert t["triangle rotation"] == sympy.Matrix([
-        [0, 0, 0, 0, -1, -1],
-        [0, 0, 0, 0, 1, 0],
-        [-1, -1, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0],
-        [0, 0, -1, -1, 0, 0],
-        [0, 0, 1, 0, 0, 0]])
-    assert t["triangle reflection"] == sympy.Matrix([
-        [0, 1, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 1],
-        [0, 0, 0, 0, 1, 0],
-        [0, 0, 0, 1, 0, 0],
-        [0, 0, 1, 0, 0, 0]])
+    assert t["interval reflection"] == sympy.Matrix(
+        [[0, -1, 0], [-1, 0, 0], [0, 0, -1]]
+    )
+    assert t["triangle rotation"] == sympy.Matrix(
+        [
+            [0, 0, 0, 0, -1, -1],
+            [0, 0, 0, 0, 1, 0],
+            [-1, -1, 0, 0, 0, 0],
+            [1, 0, 0, 0, 0, 0],
+            [0, 0, -1, -1, 0, 0],
+            [0, 0, 1, 0, 0, 0],
+        ]
+    )
+    assert t["triangle reflection"] == sympy.Matrix(
+        [
+            [0, 1, 0, 0, 0, 0],
+            [1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 1],
+            [0, 0, 0, 0, 1, 0],
+            [0, 0, 0, 1, 0, 0],
+            [0, 0, 1, 0, 0, 0],
+        ]
+    )
 
 
 def test_nedelec_hexahedron():
@@ -42,13 +52,9 @@ def test_nedelec_hexahedron():
     t = compute_base_transformations(element)
     assert len(t) == 3
     assert t["interval reflection"] == sympy.Matrix([[0, -1], [-1, 0]])
-    assert t["quadrilateral rotation"] == sympy.Matrix([
-        [0, -1, 0, 0],
-        [0, 0, 0, 1],
-        [1, 0, 0, 0],
-        [0, 0, -1, 0]])
-    assert t["quadrilateral reflection"] == sympy.Matrix([
-        [0, -1, 0, 0],
-        [-1, 0, 0, 0],
-        [0, 0, 0, -1],
-        [0, 0, -1, 0]])
+    assert t["quadrilateral rotation"] == sympy.Matrix(
+        [[0, -1, 0, 0], [0, 0, 0, 1], [1, 0, 0, 0], [0, 0, -1, 0]]
+    )
+    assert t["quadrilateral reflection"] == sympy.Matrix(
+        [[0, -1, 0, 0], [-1, 0, 0, 0], [0, 0, 0, -1], [0, 0, -1, 0]]
+    )

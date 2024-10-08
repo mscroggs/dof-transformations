@@ -8,10 +8,10 @@ from symfem.geometry import PointType
 
 
 def get_sub_entity_transformations(
-    reference: symfem.references.Reference
-) -> typing.List[typing.Tuple[
-    str, typing.Tuple[int, int], typing.Callable[[PointType], PointType]
-]]:
+    reference: symfem.references.Reference,
+) -> typing.List[
+    typing.Tuple[str, typing.Tuple[int, int], typing.Callable[[PointType], PointType]]
+]:
     """Get maps that transform each sub-entity type.
 
     Args:
@@ -22,7 +22,9 @@ def get_sub_entity_transformations(
         that transforms the entity
     """
     if reference != reference.default_reference():
-        raise ValueError("Computing transformations is not supported for non-default references.")
+        raise ValueError(
+            "Computing transformations is not supported for non-default references."
+        )
 
     if reference.name == "interval":
         return []
@@ -63,8 +65,10 @@ def get_sub_entity_transformations(
 
 
 def get_maps(
-    function: typing.Callable[[PointType], PointType]
-) -> typing.Tuple[typing.Tuple[sympy.core.expr.Expr, ...], typing.Tuple[sympy.core.expr.Expr, ...]]:
+    function: typing.Callable[[PointType], PointType],
+) -> typing.Tuple[
+    typing.Tuple[sympy.core.expr.Expr, ...], typing.Tuple[sympy.core.expr.Expr, ...]
+]:
     """Get the forward and backward maps from a function.
 
     Args:
@@ -85,7 +89,7 @@ def get_maps(
 
 
 def compute_base_transformations(
-    element: symfem.finite_element.CiarletElement
+    element: symfem.finite_element.CiarletElement,
 ) -> typing.Dict[str, sympy.matrices.dense.MutableDenseMatrix]:
     """Compute the base transformations for an element.
 
@@ -103,8 +107,10 @@ def compute_base_transformations(
     mapping = element.dofs[0].mapping
     for d in element.dofs:
         if d.mapping != mapping:
-            raise ValueError("DOF transformations not implemeneted for elements "
-                             "with mixed mapping types.")
+            raise ValueError(
+                "DOF transformations not implemeneted for elements "
+                "with mixed mapping types."
+            )
     push_forward = symfem.mappings.get_mapping(mapping)
 
     basis = element.get_basis_functions()
