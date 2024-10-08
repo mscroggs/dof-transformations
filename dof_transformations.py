@@ -86,7 +86,7 @@ def get_maps(
 
 def compute_base_transformations(
     element: symfem.finite_element.CiarletElement,
-) -> Dict[str, sympy.matrices.dense.MutableDenseMatrix]:
+) -> Dict[str, sympy.Matrix]:
     """Compute the base transformations for an element.
 
     Args:
