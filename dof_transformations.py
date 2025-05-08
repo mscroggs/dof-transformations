@@ -107,6 +107,7 @@ def compute_base_transformations(
                 "DOF transformations not implemeneted for elements "
                 "with mixed mapping types."
             )
+    assert mapping is not None
     push_forward = symfem.mappings.get_mapping(mapping)
 
     basis = element.get_basis_functions()
@@ -116,9 +117,9 @@ def compute_base_transformations(
 
         matrix = []
         dofs = element.entity_dofs(*entity)
-        for d in dofs:
-            pushed_function = push_forward(basis[d], fwd_map, bwd_map)
-            matrix.append([element.dofs[i].eval(pushed_function) for i in dofs])
+        for i in dofs:
+            pushed_function = push_forward(basis[i], fwd_map, bwd_map)  # type: ignore
+            matrix.append([element.dofs[i].eval(pushed_function) for j in dofs])
         transformations[name] = sympy.Matrix(matrix)
 
     return transformations
