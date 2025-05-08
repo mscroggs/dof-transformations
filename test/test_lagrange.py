@@ -11,6 +11,8 @@ def test_lagrange_2d(cell_type):
     element = symfem.create_element(cell_type, "Lagrange", 4)
     t = compute_base_transformations(element)
     assert len(t) == 1
+    print(t["interval reflection"])
+    print(sympy.Matrix([[0, 0, 1], [0, 1, 0], [1, 0, 0]]))
     assert t["interval reflection"] == sympy.Matrix([[0, 0, 1], [0, 1, 0], [1, 0, 0]])
 
 
